@@ -11,7 +11,11 @@ public class OrderItem {
     private Long Id;
     private Integer quantity;
 
-    //private Product product;
+    @OneToOne
+    private Product product;
+
+    @ManyToOne
+    private Order order;
 
     public Long getId() {
         return Id;
@@ -27,5 +31,13 @@ public class OrderItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

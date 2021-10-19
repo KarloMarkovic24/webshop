@@ -1,7 +1,12 @@
 package com.example.webshop.domain;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+
 
 @Entity
 @Table(name="product")
@@ -9,11 +14,21 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique=true, length = 10)
+    @Size(min = 10,max = 10)
     private String code;
+
     private String name;
+
+    @PositiveOrZero
     private Double priceHrk;
+    @Lob
     private String description;
     private boolean isAvailable;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderItem orderItem;
 
     public Long getId() {
         return id;
@@ -63,5 +78,11 @@ public class Product {
         isAvailable = available;
     }
 
+    public OrderItem getOrderItem() {
+        return orderItem;
+    }
 
+    public void setOrderItem(OrderItem orderItem) {
+        this.orderItem = orderItem;
+    }
 }

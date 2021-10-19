@@ -1,6 +1,7 @@
 package com.example.webshop.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="webshop_order")
@@ -16,8 +17,11 @@ public class Order {
     private Double totalPriceHrk;
     private Double totalPriceEur;
 
-    //customer id
+    @ManyToOne
+    private Customer customer;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    private Set<OrderItem> orderItems;
 
     public Long getId() {
         return Id;
@@ -49,5 +53,21 @@ public class Order {
 
     public void setTotalPriceEur(Double totalPriceEur) {
         this.totalPriceEur = totalPriceEur;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }

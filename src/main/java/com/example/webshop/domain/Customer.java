@@ -1,6 +1,8 @@
 package com.example.webshop.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
 @Table(name="customer")
@@ -11,7 +13,11 @@ public class Customer {
     private Long id;
     private String firstName;
     private String lastName;
+    @Email
     private String email;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    private Set<Order> orders;
 
     public Long getId() {
         return id;
@@ -43,5 +49,13 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
