@@ -1,28 +1,23 @@
-package com.example.webshop.domain;
+package com.example.webshop.api.model;
 
-import javax.persistence.*;
+import com.example.webshop.domain.Customer;
+import com.example.webshop.domain.OrderItem;
+import com.example.webshop.domain.OrderStatus;
+
+
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Entity
-@Table(name="webshop_order")
-public class Order {
+public class OrderDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-
-    @Enumerated(EnumType.STRING)
     private OrderStatus status;
-
     private BigDecimal totalPriceHrk;
     private BigDecimal totalPriceEur;
 
-    @ManyToOne
-    private Customer customer;
+    private Long customerId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-    private Set<OrderItem> orderItems;
+    private Set<OrderItemDTO> orderItems;
 
     public Long getId() {
         return Id;
@@ -56,19 +51,20 @@ public class Order {
         this.totalPriceEur = totalPriceEur;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
-    public Set<OrderItem> getOrderItems() {
+    public Set<OrderItemDTO> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(Set<OrderItem> orderItems) {
+    public void setOrderItems(Set<OrderItemDTO> orderItems) {
         this.orderItems = orderItems;
     }
+
 }

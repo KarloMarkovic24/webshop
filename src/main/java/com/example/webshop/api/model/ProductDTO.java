@@ -1,34 +1,17 @@
-package com.example.webshop.domain;
+package com.example.webshop.api.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
+public class ProductDTO {
 
-@Entity
-@Table(name="product")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique=true, length = 10)
-    @Size(min = 10,max = 10)
     private String code;
-
     private String name;
-
-    @PositiveOrZero
     private BigDecimal priceHrk;
-    @Lob
     private String description;
     private boolean isAvailable;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private OrderItem orderItem;
+    private Long orderItemId;
 
     public Long getId() {
         return id;
@@ -78,11 +61,11 @@ public class Product {
         isAvailable = available;
     }
 
-    public OrderItem getOrderItem() {
-        return orderItem;
+    public Long getOrderItemId() {
+        return orderItemId;
     }
 
-    public void setOrderItem(OrderItem orderItem) {
-        this.orderItem = orderItem;
+    public void setOrderItemId(Long orderItemId) {
+        this.orderItemId = orderItemId;
     }
 }
