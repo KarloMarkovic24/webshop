@@ -1,5 +1,6 @@
 package com.example.webshop.domain;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
@@ -23,11 +24,14 @@ public class Product {
 
     @PositiveOrZero
     private BigDecimal priceHrk;
+
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String description;
+
     private boolean isAvailable;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "product")
     private OrderItem orderItem;
 
     public Long getId() {
