@@ -11,10 +11,12 @@ public interface OrderService {
 
     OrderDTO createNewOrder(OrderDTO orderDTO);
 
-    OrderDTO updateOrder(Long id, OrderItemDTO orderItemDTO);
+    OrderDTO updateOrder(OrderItemDTO orderItemDTO);
 
     OrderDTO readOrder(Long id);
 
     void deleteOrderById(Long id);
+
+    OrderDTO finalizeOrder(OrderDTO orderDTO);
 
 }

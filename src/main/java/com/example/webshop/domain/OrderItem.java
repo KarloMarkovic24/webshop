@@ -8,7 +8,7 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private Integer quantity;
 
     @OneToOne
@@ -18,11 +18,11 @@ public class OrderItem {
     private Order order;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -47,5 +47,20 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrderItem)) {
+            return false;
+        }
+        return id != null && id.equals(((OrderItem) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

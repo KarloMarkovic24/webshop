@@ -1,16 +1,15 @@
 package com.example.webshop.api.model;
 
-import com.example.webshop.domain.Customer;
-import com.example.webshop.domain.OrderItem;
 import com.example.webshop.domain.OrderStatus;
 
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 
 public class OrderDTO {
 
-    private Long Id;
+    private Long id;
     private OrderStatus status;
     private BigDecimal totalPriceHrk;
     private BigDecimal totalPriceEur;
@@ -20,11 +19,11 @@ public class OrderDTO {
     private Set<OrderItemDTO> orderItems;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public OrderStatus getStatus() {
@@ -65,6 +64,26 @@ public class OrderDTO {
 
     public void setOrderItems(Set<OrderItemDTO> orderItems) {
         this.orderItems = orderItems;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrderDTO)) {
+            return false;
+        }
+
+        OrderDTO orderDTO = (OrderDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, orderDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
     }
 
 }

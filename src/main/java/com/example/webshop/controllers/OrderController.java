@@ -3,7 +3,6 @@ package com.example.webshop.controllers;
 import com.example.webshop.api.model.OrderDTO;
 
 import com.example.webshop.api.model.OrderItemDTO;
-import com.example.webshop.api.model.ProductDTO;
 import com.example.webshop.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +30,10 @@ public class OrderController {
         return orderService.createNewOrder(orderDTO);
     }
 
-    @PutMapping({"/{id}"})
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public OrderDTO updateOrder(@PathVariable Long id, @RequestBody OrderItemDTO orderItemDTO){
-        return orderService.updateOrder(id,orderItemDTO);
+    public OrderDTO updateOrder(@RequestBody OrderItemDTO orderItemDTO){
+        return orderService.updateOrder(orderItemDTO);
     }
 
     @DeleteMapping({"{/id}"})

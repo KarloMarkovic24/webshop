@@ -27,10 +27,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository
                 .findAll()
                 .stream()
-                .map(product -> {
-                    ProductDTO productDTO = productMapper.toDto(product);
-                    return productDTO;
-                })
+                .map(productMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -51,9 +48,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductDTO saveAndReturnDTO(Product product) {
         Product savedProduct = productRepository.save(product);
 
-        ProductDTO returnDTO = productMapper.toDto(savedProduct);
-
-        return returnDTO;
+        return productMapper.toDto(savedProduct);
     }
 
 

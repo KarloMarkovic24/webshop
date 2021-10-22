@@ -1,23 +1,20 @@
 package com.example.webshop.api.model;
 
-import com.example.webshop.domain.Order;
-import com.example.webshop.domain.Product;
-
-import javax.persistence.*;
+import java.util.Objects;
 
 public class OrderItemDTO {
 
-    private Long Id;
+    private Long id;
     private Integer quantity;
     private Long productId;
     private Long orderId;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -42,5 +39,26 @@ public class OrderItemDTO {
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrderItemDTO)) {
+            return false;
+        }
+
+         OrderItemDTO orderItemDTO = (OrderItemDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, orderItemDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
     }
 }

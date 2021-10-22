@@ -2,6 +2,7 @@ package com.example.webshop.api.model;
 
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class ProductDTO {
 
@@ -67,5 +68,26 @@ public class ProductDTO {
 
     public void setOrderItemId(Long orderItemId) {
         this.orderItemId = orderItemId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductDTO)) {
+            return false;
+        }
+
+        ProductDTO productDTO = (ProductDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, productDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
     }
 }
