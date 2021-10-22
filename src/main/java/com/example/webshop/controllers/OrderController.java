@@ -7,8 +7,6 @@ import com.example.webshop.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -36,8 +34,14 @@ public class OrderController {
         return orderService.updateOrder(orderItemDTO);
     }
 
-    @DeleteMapping({"{/id}"})
+    @DeleteMapping({"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public void deleteOrderById(@PathVariable Long id){orderService.deleteOrderById(id);}
+
+    @PutMapping({"/{id}/finalize"})
+    @ResponseStatus(HttpStatus.OK)
+    public OrderDTO finalizeOrder(@PathVariable Long id){
+        return orderService.finalizeOrder(id);
+    }
 
 }

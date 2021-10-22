@@ -2,19 +2,20 @@ package com.example.webshop.services;
 
 import com.example.webshop.api.mapper.OrderItemMapper;
 import com.example.webshop.api.mapper.OrderMapper;
+import com.example.webshop.api.model.ExchangeRateDTO;
 import com.example.webshop.api.model.OrderDTO;
 import com.example.webshop.api.model.OrderItemDTO;
 import com.example.webshop.domain.Order;
 import com.example.webshop.domain.OrderItem;
+import com.example.webshop.domain.OrderStatus;
 import com.example.webshop.exceptions.ProductNotAvailableException;
 import com.example.webshop.exceptions.ResourceNotFoundException;
 import com.example.webshop.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Optional;
+import java.math.RoundingMode;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -24,14 +25,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final ProductService productService;
     private final OrderItemMapper orderItemMapper;
+    private final RestTemplate restTemplate;
 
     private final String URI_HNB = "https://api.hnb.hr/tecajn/v1?valuta=EUR";
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ProductService productService, OrderItemMapper orderItemMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ProductService productService, OrderItemMapper orderItemMapper, RestTemplate restTemplate) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.productService = productService;
         this.orderItemMapper = orderItemMapper;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -76,27 +79,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO finalizeOrder(OrderDTO orderDTO) {
-        Order order = orderMapper.toEntity(orderDTO);
+    public OrderDTO finalizeOrder(Long id) {
+        Order order = orderRepository.getById(id);
         order.setTotalPriceHrk(totalPriceHrk(order));
+        ExchangeRateDTO rate = Objects.requireNonNull(restTemplate.getForObject(URI_HNB, ExchangeRateDTO[].class))[0];
+        BigDecimal priceEur = order.getTotalPriceHrk().divide(Objects.requireNonNull(rate).getRate(), 2, RoundingMode.UP);
+        order.setTotalPriceEur(priceEur);
+        order.setStatus(OrderStatus.SUBMITTED);
 
-        return null;
+        return saveAndReturnDTO(order);
     }
 
     private BigDecimal totalPriceHrk(Order order){
-        Set<OrderItem> orderItems = new HashSet<>(order.getOrderItems());
-        BigDecimal sum = BigDecimal.valueOf(0.00);
-        for(OrderItem orderItem : orderItems) {
-            //Price * ((BigDecimal) quantity)
-            sum.add(orderItem.getProduct().getPriceHrk().multiply(BigDecimal.valueOf(orderItem.getQuantity())));
+        BigDecimal price = new BigDecimal(0);
+
+        for (OrderItem orderItem : order.getOrderItems()) {
+            price = price.add(orderItem.getProduct().getPriceHrk().multiply(BigDecimal.valueOf(orderItem.getQuantity())));
         }
-        return sum;
-    }
 
-    private BigDecimal totalPriceEur(BigDecimal totalPriceHrk){
-        RestTemplate restTemplate = new RestTemplate();
-
-        return null;
+        return price;
     }
 }
 

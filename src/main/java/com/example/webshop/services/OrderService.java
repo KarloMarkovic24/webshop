@@ -1,11 +1,7 @@
 package com.example.webshop.services;
 
-
 import com.example.webshop.api.model.OrderDTO;
 import com.example.webshop.api.model.OrderItemDTO;
-import com.example.webshop.api.model.ProductDTO;
-import com.example.webshop.domain.Order;
-
 
 public interface OrderService {
 
@@ -17,6 +13,6 @@ public interface OrderService {
 
     void deleteOrderById(Long id);
 
-    OrderDTO finalizeOrder(OrderDTO orderDTO);
+    OrderDTO finalizeOrder(Long id);
 
 }
