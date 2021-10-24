@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id)
                 .map(orderMapper::toDto)
                 .orElseThrow(ResourceNotFoundException::new);
-    }
+   }
 
     @Override
     public OrderDTO createNewOrder(OrderDTO orderDTO) {
@@ -66,10 +66,11 @@ public class OrderServiceImpl implements OrderService {
         //true: update quantity
         OrderItem orderItem = orderItems.stream().filter(oi -> oi.getProduct().getId().equals(orderItemDTO.getProductId()))
                 .findFirst().orElse(orderItemMapper.toEntity(orderItemDTO));
-        orderItem.setQuantity(orderItemDTO.getQuantity());
-
-        savedOrder.addOrderItem(orderItem);
-
+        //quantitiy = 0 -> remove from list
+        if(orderItemDTO.getQuantity() > 0) {
+            orderItem.setQuantity(orderItemDTO.getQuantity());
+            savedOrder.addOrderItem(orderItem);
+        }
         return saveAndReturnDTO(savedOrder);
     }
 
@@ -80,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO finalizeOrder(Long id) {
-        Order order = orderRepository.getById(id);
+        Order order = orderRepository.findById(id).get();
         order.setTotalPriceHrk(totalPriceHrk(order));
         ExchangeRateDTO rate = Objects.requireNonNull(restTemplate.getForObject(URI_HNB, ExchangeRateDTO[].class))[0];
         BigDecimal priceEur = order.getTotalPriceHrk().divide(Objects.requireNonNull(rate).getRate(), 2, RoundingMode.UP);
